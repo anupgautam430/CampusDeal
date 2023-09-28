@@ -1,8 +1,10 @@
-﻿using CampusDeal.DataAccess.Repository.IRepository;
+﻿using CampusDeal.DataAccess.Repository;
+using CampusDeal.DataAccess.Repository.IRepository;
 using CampusDeal.Models;
 using CampusDeal.Models.ViewModels;
 using CampusDeal.Utility;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Data;
@@ -48,44 +50,18 @@ namespace CampusDeal.Areas.Admin.Controllers
             else
             {
                 //update
-                productVM.Product = _unit.Product.Get(u=>u.Id == id);
+                productVM.Product = _unit.Product.Get(u=>u.Id == id, includeProperties:"ProductImages");
                 return View(productVM);
             }
            
         }
         [HttpPost]
-        public IActionResult Upsert(ProductVM productVM, IFormFile? file)
+        public IActionResult Upsert(ProductVM productVM, List<IFormFile> files)
         {
            
             if (ModelState.IsValid)
             {
-                string wwwRootPath = _webHost.WebRootPath;
-                if (file != null)
-                {
-                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-                    string productPath = Path.Combine(wwwRootPath, @"images\product");
-
-                    if (!string.IsNullOrEmpty(productVM.Product.ImageUrl))
-                    {
-                        //delete the old image
-                        var oldImagePath =
-                            Path.Combine(wwwRootPath, productVM.Product.ImageUrl.TrimStart('\\'));
-
-                        if (System.IO.File.Exists(oldImagePath))
-                        {
-                            System.IO.File.Delete(oldImagePath);
-                        }
-                    }
-
-                    using (var fileStream = new FileStream(Path.Combine(productPath, fileName), FileMode.Create))
-                    {
-                        file.CopyTo(fileStream);
-                    }
-                     
-                    productVM.Product.ImageUrl = @"\images\product\" + fileName;
-                }
-
-                if(productVM.Product.Id == 0)
+                if (productVM.Product.Id == 0)
                 {
                     _unit.Product.Add(productVM.Product);
                 }
@@ -95,6 +71,46 @@ namespace CampusDeal.Areas.Admin.Controllers
                 }
 
                 _unit.Save();
+
+                string wwwRootPath = _webHost.WebRootPath;
+                if (files != null)
+                {
+
+                    foreach (IFormFile file in files)
+                    {
+                        string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                        string productPath = @"images\products\product-" + productVM.Product.Id;
+                        string finalPath = Path.Combine(wwwRootPath, productPath);
+
+                        if (!Directory.Exists(finalPath))
+                            Directory.CreateDirectory(finalPath);
+
+                        using (var fileStream = new FileStream(Path.Combine(finalPath, fileName), FileMode.Create))
+                        {
+                            file.CopyTo(fileStream);
+                        }
+
+                        ProductImage productImage = new()
+                        {
+                            ImageUrl = @"\" + productPath + @"\" + fileName,
+                            ProductId = productVM.Product.Id,
+                        };
+
+                        if (productVM.Product.ProductImages == null)
+                            productVM.Product.ProductImages = new List<ProductImage>();
+
+                        productVM.Product.ProductImages.Add(productImage);
+                    }
+
+                    _unit.Product.Update(productVM.Product);
+                    _unit.Save();
+
+
+
+
+                }
+
+
                 TempData["success"] = "Product created sucessfully!";
                 return RedirectToAction("Index");
             }
@@ -111,66 +127,94 @@ namespace CampusDeal.Areas.Admin.Controllers
             }         
         }
 
-      /*  public IActionResult Edit(int? id)
-        {
-            if (id == null || id == 0)
-            {
-                return NotFound();
-            }
-            Product? ProductFromDb = _unit.Product.Get(u => u.Id == id);
+        /*  public IActionResult Edit(int? id)
+          {
+              if (id == null || id == 0)
+              {
+                  return NotFound();
+              }
+              Product? ProductFromDb = _unit.Product.Get(u => u.Id == id);
 
-            if (ProductFromDb == null)
-            {
-                return NotFound();
-            }
-            return View(ProductFromDb);
-        }
-        [HttpPost]
-        public IActionResult Edit(Product obj)
+              if (ProductFromDb == null)
+              {
+                  return NotFound();
+              }
+              return View(ProductFromDb);
+          }
+          [HttpPost]
+          public IActionResult Edit(Product obj)
+          {
+              if (obj.Title == obj.Description.ToString())
+              {
+                  ModelState.AddModelError("Name", "The display order cannot be same.");
+              }
+              if (ModelState.IsValid)
+              {
+                  _unit.Product.Update(obj);
+                  _unit.Save();
+                  TempData["success"] = "Product Edited sucessfully!";
+                  return RedirectToAction("Index");
+              }
+              return View();
+          }*/
+
+        /* public IActionResult Delete(int? id)
+         {
+             if (id == null || id == 0)
+             {
+                 return NotFound();
+             }
+
+             Product? ProductFromDb = _unit.Product.Get(u => u.Id == id);
+
+             if (ProductFromDb == null)
+             {
+                 return NotFound();
+             }
+             return View(ProductFromDb);
+         }
+         [HttpPost, ActionName("Delete")]
+         public IActionResult DeletePOST(int? id)
+         {
+             Product? obj = _unit.Product.Get(u => u.Id == id);
+             if (obj == null)
+             {
+                 return NotFound();
+             }
+             _unit.Product.Remove(obj);
+             _unit.Save();
+             TempData["success"] = "Product Deleted sucessfully!";
+
+             return RedirectToAction("Index");
+         }*/
+
+        public IActionResult DeleteImage(int imageId)
         {
-            if (obj.Title == obj.Description.ToString())
+            var imageToBeDeleted = _unit.ProductImage.Get(u => u.Id == imageId);
+            int productId = imageToBeDeleted.ProductId;
+            if (imageToBeDeleted != null)
             {
-                ModelState.AddModelError("Name", "The display order cannot be same.");
-            }
-            if (ModelState.IsValid)
-            {
-                _unit.Product.Update(obj);
+                if (!string.IsNullOrEmpty(imageToBeDeleted.ImageUrl))
+                {
+                    var oldImagePath =
+                                   Path.Combine(_webHost.WebRootPath,
+                                   imageToBeDeleted.ImageUrl.TrimStart('\\'));
+
+                    if (System.IO.File.Exists(oldImagePath))
+                    {
+                        System.IO.File.Delete(oldImagePath);
+                    }
+                }
+
+                _unit.ProductImage.Remove(imageToBeDeleted);
                 _unit.Save();
-                TempData["success"] = "Product Edited sucessfully!";
-                return RedirectToAction("Index");
-            }
-            return View();
-        }*/
 
-       /* public IActionResult Delete(int? id)
-        {
-            if (id == null || id == 0)
-            {
-                return NotFound();
+                TempData["success"] = "Deleted successfully";
             }
 
-            Product? ProductFromDb = _unit.Product.Get(u => u.Id == id);
-
-            if (ProductFromDb == null)
-            {
-                return NotFound();
-            }
-            return View(ProductFromDb);
+            return RedirectToAction(nameof(Upsert), new { id = productId });
         }
-        [HttpPost, ActionName("Delete")]
-        public IActionResult DeletePOST(int? id)
-        {
-            Product? obj = _unit.Product.Get(u => u.Id == id);
-            if (obj == null)
-            {
-                return NotFound();
-            }
-            _unit.Product.Remove(obj);
-            _unit.Save();
-            TempData["success"] = "Product Deleted sucessfully!";
 
-            return RedirectToAction("Index");
-        }*/
 
         #region API CALLS
 
@@ -190,14 +234,29 @@ namespace CampusDeal.Areas.Admin.Controllers
             {
                 return Json(new { sucess = false, message = "Error while Deleting" });
             }
-            var oldImagePath =
-                            Path.Combine(_webHost.WebRootPath,
-                            productToBeDeleted.ImageUrl.TrimStart('\\'));
+            //var oldImagePath =
+            //               Path.Combine(_webHost.WebRootPath,
+            //                productToBeDeleted.ImageUrl.TrimStart('\\'));
 
-            if (System.IO.File.Exists(oldImagePath))
+            //if (System.IO.File.Exists(oldImagePath))
+            //{
+            //    System.IO.File.Delete(oldImagePath);
+            //}
+
+            
+            string productPath = @"images\products\product-" + id;
+            string finalPath = Path.Combine(_webHost.WebRootPath, productPath);
+
+            if (Directory.Exists(finalPath))
             {
-                System.IO.File.Delete(oldImagePath);
+                string[] filePaths = Directory.GetFiles(finalPath);
+                foreach (string filePath in filePaths)
+                {
+                    System.IO.File.Delete(filePath);
+                }
+                Directory.Delete(finalPath);
             }
+                
 
             _unit.Product.Remove(productToBeDeleted);
             _unit.Save();

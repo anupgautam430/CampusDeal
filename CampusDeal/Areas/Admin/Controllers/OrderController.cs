@@ -1,6 +1,7 @@
-﻿using CampusDeal.DataAccess.Repository.IRepository;
-using CampusDeal.Models;
+﻿
+using CampusDeal.DataAccess.Repository.IRepository;
 using CampusDeal.Models.ViewModels;
+using CampusDeal.Models;
 using CampusDeal.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;

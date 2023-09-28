@@ -17,6 +17,7 @@ namespace CampusDeal.DataAccess.Data
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }
         public DbSet<OrderHeader> OrderHeaders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<ProductImage> ProductImages { get; set; }
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
@@ -65,8 +66,7 @@ namespace CampusDeal.DataAccess.Data
                     Seller="john wick",
                     Price = 400,
                     PriceTotal =400,
-                    CategoryId = 1,
-                    ImageUrl = ""
+                    CategoryId = 1
                 },
                 new Product
                 {
@@ -77,8 +77,7 @@ namespace CampusDeal.DataAccess.Data
                     Seller = "john snow",
                     Price = 200,
                     PriceTotal = 200,
-                    CategoryId = 1,
-                    ImageUrl = ""
+                    CategoryId = 1
                 },
                 new Product
                 {
@@ -89,8 +88,7 @@ namespace CampusDeal.DataAccess.Data
                     Seller = "john cena",
                     Price = 150,
                     PriceTotal = 150,
-                    CategoryId = 2,
-                    ImageUrl = ""
+                    CategoryId = 2
                 },
                 new Product
                 {
@@ -101,8 +99,7 @@ namespace CampusDeal.DataAccess.Data
                     Seller = "billie",
                     Price = 40000,
                     PriceTotal = 39000,
-                    CategoryId = 2,
-                    ImageUrl=""
+                    CategoryId = 2
                 }
 
                 );

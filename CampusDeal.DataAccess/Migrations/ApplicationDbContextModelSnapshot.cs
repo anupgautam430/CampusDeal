@@ -241,10 +241,6 @@ namespace CampusDeal.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("PNO")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -275,7 +271,6 @@ namespace CampusDeal.DataAccess.Migrations
                             Id = 1,
                             CategoryId = 1,
                             Description = "the maths book",
-                            ImageUrl = "",
                             PNO = "A01",
                             Price = 400.0,
                             PriceTotal = 400.0,
@@ -287,7 +282,6 @@ namespace CampusDeal.DataAccess.Migrations
                             Id = 2,
                             CategoryId = 1,
                             Description = "the maths notebook",
-                            ImageUrl = "",
                             PNO = "A02",
                             Price = 200.0,
                             PriceTotal = 200.0,
@@ -299,7 +293,6 @@ namespace CampusDeal.DataAccess.Migrations
                             Id = 3,
                             CategoryId = 2,
                             Description = "the kit for science lab",
-                            ImageUrl = "",
                             PNO = "A03",
                             Price = 150.0,
                             PriceTotal = 150.0,
@@ -311,13 +304,34 @@ namespace CampusDeal.DataAccess.Migrations
                             Id = 4,
                             CategoryId = 2,
                             Description = "laptop in a very good condition. acer aspire 5 250GB ssd, 1 tb HDD, intel5 7gen 4 GB graphics  ",
-                            ImageUrl = "",
                             PNO = "A04",
                             Price = 40000.0,
                             PriceTotal = 39000.0,
                             Seller = "billie",
                             Title = "Laptop"
                         });
+                });
+
+            modelBuilder.Entity("CampusDeal.Models.ProductImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductImages");
                 });
 
             modelBuilder.Entity("CampusDeal.Models.ShoppingCart", b =>
@@ -566,7 +580,6 @@ namespace CampusDeal.DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("CompanyId")
-                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -628,6 +641,17 @@ namespace CampusDeal.DataAccess.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("CampusDeal.Models.ProductImage", b =>
+                {
+                    b.HasOne("CampusDeal.Models.Product", "Product")
+                        .WithMany("ProductImages")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("CampusDeal.Models.ShoppingCart", b =>
@@ -704,11 +728,14 @@ namespace CampusDeal.DataAccess.Migrations
                 {
                     b.HasOne("CampusDeal.Models.Company", "Company")
                         .WithMany()
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CompanyId");
 
                     b.Navigation("Company");
+                });
+
+            modelBuilder.Entity("CampusDeal.Models.Product", b =>
+                {
+                    b.Navigation("ProductImages");
                 });
 #pragma warning restore 612, 618
         }

@@ -5,11 +5,16 @@ VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CampusDeal", "CampusDeal\CampusDeal.csproj", "{34BFDC0E-FC68-4D72-B322-39E9CCC77631}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CampusDeal.DataAccess", "CampusDeal.DataAccess\CampusDeal.DataAccess.csproj", "{B0BD0471-D22B-4471-A3D4-E6004A76860C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CampusDeal.DataAccess", "CampusDeal.DataAccess\CampusDeal.DataAccess.csproj", "{B0BD0471-D22B-4471-A3D4-E6004A76860C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CampusDeal.Models", "CampusDeal.Models\CampusDeal.Models.csproj", "{26C12FE2-E410-48FA-BF46-3DB02E0E2830}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CampusDeal.Models", "CampusDeal.Models\CampusDeal.Models.csproj", "{26C12FE2-E410-48FA-BF46-3DB02E0E2830}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CampusDeal.Utility", "CampusDeal.Utility\CampusDeal.Utility.csproj", "{D10BCA9D-2CDE-4DFF-BDD0-0222D87CDAC6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CampusDeal.Utility", "CampusDeal.Utility\CampusDeal.Utility.csproj", "{D10BCA9D-2CDE-4DFF-BDD0-0222D87CDAC6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0B9EA8EF-F22C-4811-9F03-63F7E8D519F0}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

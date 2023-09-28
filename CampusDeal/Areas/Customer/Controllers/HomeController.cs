@@ -1,4 +1,4 @@
-﻿using CampusDeal.DataAccess.Migrations;
+﻿using CampusDeal.DataAccess;
 using CampusDeal.DataAccess.Repository.IRepository;
 using CampusDeal.Models;
 using CampusDeal.Utility;
@@ -23,7 +23,7 @@ namespace CampusDeal.Areas.Customer.Controllers
 
         public IActionResult Index()
         {
-            IEnumerable<Product> productList = _unitOfWork.Product.GetAll(includeProperties: "Category");
+            IEnumerable<Product> productList = _unitOfWork.Product.GetAll(includeProperties: "Category,ProductImages");
             return View(productList);
         }
 
@@ -31,7 +31,7 @@ namespace CampusDeal.Areas.Customer.Controllers
         {
             ShoppingCart cart = new()
             {
-                Product = _unitOfWork.Product.Get(u => u.Id == productid, includeProperties: "Category"),
+                Product = _unitOfWork.Product.Get(u => u.Id == productid, includeProperties: "Category,ProductImages"),
                 Count = 1,
                 ProductId = productid
             };

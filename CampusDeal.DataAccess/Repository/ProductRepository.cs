@@ -29,10 +29,11 @@ namespace CampusDeal.DataAccess.Repository
                 objFromDb.Price = ob.Price;
                 objFromDb.PNO = ob.PNO;
                 objFromDb.PriceTotal= ob.PriceTotal;
-                if(ob.ImageUrl!=null)
-                {
-                    objFromDb.ImageUrl = ob.ImageUrl;
-                }
+                objFromDb.ProductImages= ob.ProductImages;
+                //if(ob.ImageUrl!=null)
+                //{
+                //    objFromDb.ImageUrl = ob.ImageUrl;
+                //}
 
             }
         }
