@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel=" stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
     <link rel="stylesheet" href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
+   
+
 </head>
 <body>
     <header>
@@ -81,7 +83,8 @@
 
     <footer class="border-top bg-black footer text-muted">
         <div class="container text-light">
-            Projected <i class="bi bi-arrow-through-heart-fill"></i> By CampusDealz.
+            Projected By CampusDealz.         
+                <a class="navbar-brand text-info" asp-area="Customer" asp-controller="Home" asp-action="Chatbot"><img src="/Images/ChatBot.png" style="width:50px" /></a>        
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -92,6 +95,10 @@
     <script src="https://cdn.tiny.cloud/1/ga8z6r3hfa12fj7kw663rjgn8znuz4zcz8jjnxuuni7j2msr/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/botui@0.5/botui.js"></script>
+    <script src="~/js/script.js" asp-append-version="true"></script>
+
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
