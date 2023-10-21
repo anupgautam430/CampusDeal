@@ -19,6 +19,7 @@ namespace CampusDeal.DataAccess.Repository
         public IOrderHeaderRepository OrderHeader { get; private set; }
         public IOrderDetailRepository OrderDetail { get; private set; }
         public IProductImageRepository ProductImage { get; private set; }
+        
 
         public UnitOfWork(ApplicationDbContext db)
         {
@@ -31,6 +32,7 @@ namespace CampusDeal.DataAccess.Repository
             OrderDetail = new OrderDetailRepository(_db);
             OrderHeader = new OrderHeaderRepository(_db);
             ProductImage = new ProductImageRepository(_db);
+            
         }
         public void Save()
         {

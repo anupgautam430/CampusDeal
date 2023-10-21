@@ -1,9 +1,11 @@
 ﻿using CampusDeal.DataAccess;
 using CampusDeal.DataAccess.Repository.IRepository;
 using CampusDeal.Models;
+using CampusDeal.Models.ViewModels;
 using CampusDeal.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using System.Security.Claims;
 
@@ -79,6 +81,26 @@ namespace CampusDeal.Areas.Customer.Controllers
         public IActionResult Chatbot()
         {
             return View();
+        }
+
+        public IActionResult Search(string searchQuery)
+        {
+            var viewModel = new ProductSearchVM();
+
+            if (!string.IsNullOrEmpty(searchQuery))
+            {
+                viewModel.SearchQuery = searchQuery;
+
+                // Fetch all products from your repository
+                var allProducts = _unitOfWork.Product.GetAll(); // Modify this based on your repository implementation
+
+                // Filter products based on the search query
+                viewModel.SearchResults = allProducts
+                    .Where(p => p.Title.Contains(searchQuery) || p.Description.Contains(searchQuery))
+                    .ToList();
+            }
+
+            return View(viewModel);
         }
 
 

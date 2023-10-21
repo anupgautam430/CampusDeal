@@ -17,6 +17,7 @@ namespace CampusDeal.DataAccess.Repository.IRepository
         IOrderHeaderRepository OrderHeader { get; }
         IProductImageRepository ProductImage { get; }
 
+       
         void Save();
     }
 }

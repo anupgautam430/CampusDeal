@@ -96,7 +96,6 @@ namespace CampusDeal.Areas.Admin.Controllers
         }
 
 
-
         #region API CALLS
 
         [HttpGet]
@@ -117,7 +116,6 @@ namespace CampusDeal.Areas.Admin.Controllers
                 }
             }
             return Json(new {data = objUserList });
-
         }
 
         [HttpPost]

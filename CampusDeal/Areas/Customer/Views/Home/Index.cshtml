@@ -1,6 +1,13 @@
 ﻿@model IEnumerable<Product>
 <div id="product-list-container" style="min-height: 400px;">
-    <div class="row pc-3">
+    <div class="row pc-3">   
+        <form asp-controller="Home" asp-action="Search" method="get">
+            <div class="form-group">
+                <input type="text" class="shadow" name="searchQuery" placeholder="Search for products">
+                <button type="submit" class="btn btn-dark text-white">Search</button>
+            </div>
+        </form>
+        </>
         @foreach (var product in Model)
         {
             <div class="col-lg-3 col-sm-6 my-4">
@@ -9,11 +16,14 @@
                         <div class="card border-0 p-3 shadow border-top border-5 rounded">
                             @if (product.ProductImages != null && product.ProductImages.Count() > 0)
                             {
-                                <img src="@product.ProductImages.FirstOrDefault().ImageUrl" class="card-img-top rounded" />
+                                @foreach (var image in product.ProductImages)
+                                {
+                                    <img src="@image.ImageUrl" class="card-img-top rounded" />
+                                }
                             }
                             else
                             {
-                                <img src="https://placehold.co/500*600/png" class="card-img-top rounded" />
+                                <img src="https://placehold.co/500x600.png" class="card-img-top rounded" />
                             }
 
                             <div class="card-body pb-0">

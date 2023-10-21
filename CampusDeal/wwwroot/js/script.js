@@ -96,7 +96,7 @@ const userMessage = [
     u.volume = 1;
     u.rate = 1;
     u.pitch = 1;
-    synth.speak(u);
+      synth.speak(u);
   }
   
   function sendMessage() {
